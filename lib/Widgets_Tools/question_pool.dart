@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app_firebase/QuizModel/colors.dart';
+
+import 'package:quiz_app_firebase/Widgets_Tools/colors.dart';
 
 class QuestionPools extends StatelessWidget {
   const QuestionPools({super.key,required this.que,required this.index,required this.totalQue});
