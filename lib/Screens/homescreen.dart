@@ -5,6 +5,8 @@ import 'package:quiz_app_firebase/Widgets_Tools/colors.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/options.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/question_pool.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/questions.dart';
+import 'package:quiz_app_firebase/Widgets_Tools/result.dart';
+import 'package:quiz_app_firebase/database_firebase.dart';
 
 class QuizHome extends StatefulWidget {
   const QuizHome({super.key});
@@ -14,20 +16,36 @@ class QuizHome extends StatefulWidget {
 }
 
 class _QuizHomeState extends State<QuizHome> {
-  List<Question> _questions = [
-    Question(
-        id: "10",
-        title: "what is 3+3?",
-        options: {"5": false, "6": true, "8": false, "7": false}),
-    Question(id: "11", title: "test question", options: {"6": false, "5": true})
-  ];
+  var db = FirebaseData();
+  late Future _questions;
+
+  Future<List<Question>> getData() async {
+    return db.fetchQuestions();
+  }
+
+  @override
+  void initState() {
+    _questions = getData();
+    super.initState();
+  }
+
   int index = 0;
   int score = 0;
   bool isPressed = false;
   bool isAnswered = false;
-  void nextQuestion() {
-    if (index == _questions.length - 1) {
-      return;
+
+  void nextQuestion(int questionL) {
+    if (index == questionL - 1) {
+      // Show result dialog when all questions are answered
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) => ResultBox(
+          result: score,
+          questionL: questionL,
+          onPressed: startAgain,
+        ),
+      );
     } else {
       if (isPressed) {
         setState(() {
@@ -51,69 +69,99 @@ class _QuizHomeState extends State<QuizHome> {
     } else {
       if (value == true) {
         score++;
-        setState(() {
-          isPressed = true;
-          isAnswered = true;
-        });
       }
+      setState(() {
+        isPressed = true;
+        isAnswered = true;
+      });
     }
+  }
+
+  void startAgain() {
+    setState(() {
+      index = 0;
+      score = 0;
+      isAnswered = false;
+      isPressed = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 254, 255),
-      appBar: AppBar(
-        title: Text(
-          "Quiz App",
-          style: TextStyle(color: const Color.fromARGB(255, 255, 0, 0)),
-        ),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("Score: $score"),
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            children: [
-              QuestionPools(
-                  que: _questions[index].title,
-                  index: index,
-                  totalQue: _questions.length),
-              SizedBox(
-                height: 25,
+    return FutureBuilder(
+      future: _questions as Future<List<Question>>,
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text("${snapshot.error}"));
+        }
+        if (snapshot.hasData) {
+          var extractedData = snapshot.data as List<Question>;
+
+          return Scaffold(
+            backgroundColor: const Color.fromARGB(255, 255, 254, 255),
+            appBar: AppBar(
+              title: Text(
+                "Quiz App",
+                style: TextStyle(color: const Color.fromARGB(255, 255, 0, 0)),
               ),
-              for (int i = 0; i < _questions[index].options.length; i++)
-                GestureDetector(
-                  onTap: () =>
-                      checkAns(_questions[index].options.values.toList()[i]),
-                  child: OptionUi(
-                    option: _questions[index].options.keys.toList()[i],
-                    color: isPressed
-                        ? _questions[index].options.values.toList()[i] == true
-                            ? correct
-                            : wrong
-                        : same,
-                  ),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              centerTitle: true,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Score: $score"),
                 )
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Buttons(
-          nextQuestion: nextQuestion,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    QuestionPools(
+                      que: extractedData[index].title,
+                      index: index,
+                      totalQue: extractedData.length,
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    for (int i = 0; i < extractedData[index].options.length; i++)
+                      GestureDetector(
+                        onTap: () => checkAns(
+                            extractedData[index].options.values.toList()[i]),
+                        child: OptionUi(
+                          option: extractedData[index].options.keys.toList()[i],
+                          color: isPressed
+                              ? extractedData[index].options.values.toList()[i] ==
+                                      true
+                                  ? correct
+                                  : wrong
+                              : same,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            floatingActionButton: GestureDetector(
+              onTap: () => nextQuestion(extractedData.length),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Buttons(),
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
+        } else {
+          return Center(child: Text("No Data Available"));
+        }
+      },
     );
   }
 }
