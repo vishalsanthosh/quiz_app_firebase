@@ -5,7 +5,7 @@ import 'package:quiz_app_firebase/Widgets_Tools/options.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/question_pool.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/questions.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/result.dart';
-import 'package:quiz_app_firebase/database_firebase.dart';
+import 'package:quiz_app_firebase/Database/database_firebase.dart';
 
 class QuizHome extends StatefulWidget {
   const QuizHome({super.key});
