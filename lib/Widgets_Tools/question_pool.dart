@@ -12,9 +12,11 @@ class QuestionPools extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
      alignment: Alignment.centerLeft,
-     child: Text("Question ${index+1}/$totalQue: $que",style: TextStyle(fontSize: 18,
-     color: noSelection
-     ),),
+     child: Center(
+       child: Text("$que",style: TextStyle(fontSize: 18,
+       color: noSelection
+       ),),
+     ),
     );
   }
 }

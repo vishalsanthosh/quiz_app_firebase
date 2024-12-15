@@ -11,13 +11,17 @@ class OptionUi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: color,
-      child: ListTile(
-        title: Center(
-          child: Text(
-            option,
-            style: TextStyle(fontSize: 22),
+    return Center(
+      child: Card(
+        color: color,
+        child: Center(
+          child: ListTile(
+            title: Center(
+              child: Text(
+                option,
+                style: TextStyle(fontSize: 22),
+              ),
+            ),
           ),
         ),
       ),

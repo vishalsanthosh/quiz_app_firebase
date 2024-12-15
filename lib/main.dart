@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app_firebase/Screens/homescreen.dart';
+import 'package:quiz_app_firebase/Screens/splash_loadingscreen.dart';
 
 void main() {
  
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
       
       ),
-      home: QuizHome (),
+      home: SplashScreen (),
     );
   }
 }

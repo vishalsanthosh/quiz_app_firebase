@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:quiz_app_firebase/Widgets_Tools/button.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/colors.dart';
 import 'package:quiz_app_firebase/Widgets_Tools/options.dart';
@@ -36,7 +35,6 @@ class _QuizHomeState extends State<QuizHome> {
 
   void nextQuestion(int questionL) {
     if (index == questionL - 1) {
-      // Show result dialog when all questions are answered
       showDialog(
         barrierDismissible: false,
         context: context,
@@ -101,23 +99,28 @@ class _QuizHomeState extends State<QuizHome> {
           var extractedData = snapshot.data as List<Question>;
 
           return Scaffold(
-            backgroundColor: const Color.fromARGB(255, 255, 254, 255),
+            backgroundColor: const Color.fromARGB(255, 233, 199, 238),
             appBar: AppBar(
               title: Text(
                 "Quiz App",
-                style: TextStyle(color: const Color.fromARGB(255, 255, 0, 0)),
+                style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold),
               ),
-              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              backgroundColor: const Color.fromARGB(255, 50, 150, 255),
               centerTitle: true,
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Score: $score"),
+                  child: Text(
+                    "Score: $score",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
                 )
               ],
             ),
             body: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(15.0),
               child: Container(
                 width: double.infinity,
                 child: Column(
@@ -128,7 +131,7 @@ class _QuizHomeState extends State<QuizHome> {
                       totalQue: extractedData.length,
                     ),
                     SizedBox(
-                      height: 25,
+                      height: 30,
                     ),
                     for (int i = 0; i < extractedData[index].options.length; i++)
                       GestureDetector(
@@ -137,13 +140,13 @@ class _QuizHomeState extends State<QuizHome> {
                         child: OptionUi(
                           option: extractedData[index].options.keys.toList()[i],
                           color: isPressed
-                              ? extractedData[index].options.values.toList()[i] ==
-                                      true
+                              ? extractedData[index].options.values.toList()[i] == true
                                   ? correct
                                   : wrong
                               : same,
                         ),
                       ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -151,12 +154,11 @@ class _QuizHomeState extends State<QuizHome> {
             floatingActionButton: GestureDetector(
               onTap: () => nextQuestion(extractedData.length),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Buttons(),
               ),
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );
         } else {
           return Center(child: Text("No Data Available"));
