@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:quiz_app_firebase/Screens/homescreen.dart';
+
+import 'package:quiz_app_firebase/Screens/intro_screen.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,10 +16,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => QuizHome()),
+        MaterialPageRoute(builder: (context) => IntroScreeN()),
       );
     });
   }

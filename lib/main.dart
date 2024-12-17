@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app_firebase/Screens/homescreen.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+
 import 'package:quiz_app_firebase/Screens/splash_loadingscreen.dart';
 
-void main() {
- 
+
+void main() async{
+  await Hive.initFlutter();
+  
+  var box=await Hive.openBox('box');
   runApp(const MyApp());
 }
 
@@ -15,12 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Quiz App',
-      theme: ThemeData(
-      
-      ),
-      home: SplashScreen (),
+      home: SplashScreen(),
     );
   }
 }
-
+     

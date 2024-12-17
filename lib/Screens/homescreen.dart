@@ -101,6 +101,7 @@ class _QuizHomeState extends State<QuizHome> {
           return Scaffold(
             backgroundColor: const Color.fromARGB(255, 233, 199, 238),
             appBar: AppBar(
+             leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back,color: Colors.white,)),
               title: Text(
                 "Quiz App",
                 style: TextStyle(
