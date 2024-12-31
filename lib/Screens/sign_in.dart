@@ -80,6 +80,7 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(height: 20),
               TextFormField(
                 controller: passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),

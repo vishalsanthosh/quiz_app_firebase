@@ -34,7 +34,7 @@ class _IntroScreeNState extends State<IntroScreeN> {
                   Shadow(
                     offset: Offset(2, 2),
                     blurRadius: 10,
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black,
                   ),
                 ],
               ),
@@ -64,7 +64,7 @@ class _IntroScreeNState extends State<IntroScreeN> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.blue.withOpacity(0.5),
+                        color: Colors.blue,
                         blurRadius: 15,
                         offset: Offset(0, 6),
                       ),
